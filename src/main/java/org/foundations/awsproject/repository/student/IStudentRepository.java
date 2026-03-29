@@ -9,6 +9,10 @@ import java.util.UUID;
 public interface IStudentRepository {
     Student save(Student student);
 
+    Optional<Student> update(UUID id, Student student);
+
+    Optional<Student> delete(UUID id);
+
     List<Student> findAll();
 
     Optional<Student> findById(UUID id);

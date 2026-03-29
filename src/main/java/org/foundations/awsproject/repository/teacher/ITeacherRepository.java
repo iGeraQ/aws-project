@@ -8,7 +8,11 @@ import java.util.UUID;
 
 public interface
 ITeacherRepository {
-    Teacher save(Teacher student);
+    Teacher save(Teacher teacher);
+
+    Optional<Teacher> update(UUID id, Teacher teacher);
+
+    Optional<Teacher> delete(UUID id);
 
     List<Teacher> findAll();
 
