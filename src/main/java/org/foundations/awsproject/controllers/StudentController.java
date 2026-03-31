@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/alumnos")
+@RequestMapping("/alumnos")
 public class StudentController {
 
     private final StudentService studentService;
@@ -27,7 +26,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UpdateStudentResponse> findById(@PathVariable UUID id){
+    public ResponseEntity<UpdateStudentResponse> findById(@PathVariable Long id){
         // Si el service lanza una excepción si no existe, Spring la capturará
         return ResponseEntity.ok(this.studentService.findById(id));
     }
@@ -39,14 +38,14 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateStudentResponse> update(@PathVariable UUID id, @Valid @RequestBody UpdateStudentRequest body){
+    public ResponseEntity<UpdateStudentResponse> update(@PathVariable Long id, @Valid @RequestBody UpdateStudentRequest body){
         UpdateStudentResponse student = this.studentService.update(id, body);
         return ResponseEntity.ok(student);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         this.studentService.delete(id); // El retorno del service se ignora porque enviamos 204
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

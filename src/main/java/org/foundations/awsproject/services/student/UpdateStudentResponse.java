@@ -1,18 +1,26 @@
 package org.foundations.awsproject.services.student;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.foundations.awsproject.entities.Student;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public record UpdateStudentResponse(
-        UUID id,
+        Long id,
+        @JsonProperty("nombres")
         String name,
+        @JsonProperty("apellidos")
         String lastname,
+        @JsonProperty("matricula")
         String studentId,
+        @JsonProperty("promedio")
         float gpa,
+        @JsonIgnore
         boolean isActive,
+        @JsonIgnore
         LocalDate createdAt,
+        @JsonIgnore
         LocalDate updatedAt
 ) {
 

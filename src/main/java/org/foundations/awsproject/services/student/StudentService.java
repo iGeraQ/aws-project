@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class StudentService {
@@ -24,7 +23,7 @@ public class StudentService {
                 .toList();
     }
 
-    public UpdateStudentResponse findById(UUID id) {
+    public UpdateStudentResponse findById(Long id) {
         return studentRepository.findById(id)
                 .map(UpdateStudentResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
@@ -32,6 +31,7 @@ public class StudentService {
 
     public CreateStudentResponse create(CreateStudentRequest request) {
         Student student = new Student();
+        student.setId(request.id());
         student.setName(request.name());
         student.setLastname(request.lastname());
         student.setStudentId(request.studentId());
@@ -41,7 +41,7 @@ public class StudentService {
         return CreateStudentResponse.from(savedStudent);
     }
 
-    public UpdateStudentResponse update(UUID id, UpdateStudentRequest request) {
+    public UpdateStudentResponse update(Long id, UpdateStudentRequest request) {
         Student student = new Student();
         student.setName(request.name());
         student.setLastname(request.lastname());
@@ -53,7 +53,7 @@ public class StudentService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
     }
 
-    public UpdateStudentResponse delete(UUID id) {
+    public UpdateStudentResponse delete(Long id) {
         return studentRepository.delete(id)
                 .map(UpdateStudentResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));

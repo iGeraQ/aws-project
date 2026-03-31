@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "teachers")
@@ -15,15 +14,15 @@ import java.util.UUID;
 public class Teacher {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // Corregido: strategy y AUTO en mayúsculas
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
     private String lastname;
     private int classHour;
 
     @Column(name = "employee_id", unique = true) // Recomendado: nombre claro en BD y que sea único
-    private int employeeId; // Corregido a camelCase (estándar de Java)
+    private String employeeId; // Permite ids alfanuméricos del cliente
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;

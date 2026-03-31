@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 @Profile("jpa")
@@ -24,7 +23,7 @@ class JpaStudentRepository implements IStudentRepository{
     }
 
     @Override
-    public Optional<Student> update(UUID id, Student student) {
+    public Optional<Student> update(Long id, Student student) {
         return this.springStudentRepository.findActiveById(id)
                 .map(existingStudent -> {
                     if (student.getName() != null) {
@@ -42,7 +41,7 @@ class JpaStudentRepository implements IStudentRepository{
     }
 
     @Override
-    public Optional<Student> delete(UUID id) {
+    public Optional<Student> delete(Long id) {
         return this.springStudentRepository.findActiveById(id)
                 .map(existingStudent -> {
                     existingStudent.deactivate();
@@ -56,7 +55,7 @@ class JpaStudentRepository implements IStudentRepository{
     }
 
     @Override
-    public Optional<Student> findById(UUID id) {
+    public Optional<Student> findById(Long id) {
         return this.springStudentRepository.findActiveById(id);
     }
 }

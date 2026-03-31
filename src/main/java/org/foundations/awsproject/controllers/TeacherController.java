@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/profesores")
+@RequestMapping("/profesores")
 public class TeacherController {
 
     private final TeacherService teacherService;
@@ -29,7 +28,7 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UpdateTeacherResponse> findById(@PathVariable UUID id) {
+    public ResponseEntity<UpdateTeacherResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(this.teacherService.findById(id));
     }
 
@@ -40,14 +39,14 @@ public class TeacherController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateTeacherResponse> update(@PathVariable UUID id, @Valid @RequestBody UpdateTeacherRequest body) {
+    public ResponseEntity<UpdateTeacherResponse> update(@PathVariable Long id, @Valid @RequestBody UpdateTeacherRequest body) {
         UpdateTeacherResponse teacher = this.teacherService.update(id, body);
         return ResponseEntity.ok(teacher);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.teacherService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

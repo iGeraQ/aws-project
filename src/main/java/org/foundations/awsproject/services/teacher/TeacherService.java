@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class TeacherService {
@@ -24,7 +23,7 @@ public class TeacherService {
                 .toList();
     }
 
-    public UpdateTeacherResponse findById(UUID id) {
+    public UpdateTeacherResponse findById(Long id) {
         return teacherRepository.findById(id)
                 .map(UpdateTeacherResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher not found"));
@@ -32,6 +31,7 @@ public class TeacherService {
 
     public CreateTeacherResponse create(CreateTeacherRequest request) {
         Teacher teacher = new Teacher();
+        teacher.setId(request.id());
         teacher.setName(request.name());
         teacher.setLastname(request.lastname());
         teacher.setClassHour(request.classHour());
@@ -41,7 +41,7 @@ public class TeacherService {
         return CreateTeacherResponse.from(savedTeacher);
     }
 
-    public UpdateTeacherResponse update(UUID id, UpdateTeacherRequest request) {
+    public UpdateTeacherResponse update(Long id, UpdateTeacherRequest request) {
         Teacher teacher = new Teacher();
         teacher.setName(request.name());
         teacher.setLastname(request.lastname());
@@ -53,7 +53,7 @@ public class TeacherService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher not found"));
     }
 
-    public UpdateTeacherResponse delete(UUID id) {
+    public UpdateTeacherResponse delete(Long id) {
         return teacherRepository.delete(id)
                 .map(UpdateTeacherResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Teacher not found"));

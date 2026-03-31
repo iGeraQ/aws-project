@@ -8,13 +8,12 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-public interface ISDTeacherRepository extends JpaRepository<Teacher, UUID> {
+public interface ISDTeacherRepository extends JpaRepository<Teacher, Long> {
 
     @Query("select t from Teacher t where t.isActive = true")
     List<Teacher> findAllActive();
 
     @Query("select t from Teacher t where t.id = :id and t.isActive = true")
-    Optional<Teacher> findActiveById(@Param("id") UUID id);
+    Optional<Teacher> findActiveById(@Param("id") Long id);
 }

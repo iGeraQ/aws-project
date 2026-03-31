@@ -4,17 +4,16 @@ import org.foundations.awsproject.entities.Teacher;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface
 ITeacherRepository {
     Teacher save(Teacher teacher);
 
-    Optional<Teacher> update(UUID id, Teacher teacher);
+    Optional<Teacher> update(Long id, Teacher teacher);
 
-    Optional<Teacher> delete(UUID id);
+    Optional<Teacher> delete(Long id);
 
     List<Teacher> findAll();
 
-    Optional<Teacher> findById(UUID id);
+    Optional<Teacher> findById(Long id);
 }

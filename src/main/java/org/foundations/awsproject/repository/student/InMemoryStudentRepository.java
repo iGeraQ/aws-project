@@ -8,24 +8,28 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 @Profile("memory")
 class InMemoryStudentRepository implements IStudentRepository {
 
-    private final Map<UUID, Student> students = new ConcurrentHashMap<>();
+    private final Map<Long, Student> students = new ConcurrentHashMap<>();
+    private final AtomicLong idSequence = new AtomicLong(1);
 
     @Override
     public Student save(Student student) {
         LocalDate now = LocalDate.now();
 
         if (student.getId() == null) {
-            student.setId(UUID.randomUUID());
-            if (student.getCreatedAt() == null) {
-                student.setCreatedAt(now);
-            }
+            student.setId(idSequence.getAndIncrement());
+        } else {
+            idSequence.updateAndGet(current -> Math.max(current, student.getId() + 1));
+        }
+
+        if (student.getCreatedAt() == null) {
+            student.setCreatedAt(now);
         }
 
         student.setUpdatedAt(now);
@@ -34,7 +38,7 @@ class InMemoryStudentRepository implements IStudentRepository {
     }
 
     @Override
-    public Optional<Student> update(UUID id, Student student) {
+    public Optional<Student> update(Long id, Student student) {
         Student existingStudent = students.get(id);
         if (existingStudent == null || !existingStudent.isActive()) {
             return Optional.empty();
@@ -56,7 +60,7 @@ class InMemoryStudentRepository implements IStudentRepository {
     }
 
     @Override
-    public Optional<Student> delete(UUID id) {
+    public Optional<Student> delete(Long id) {
         Student existingStudent = students.get(id);
         if (existingStudent == null || !existingStudent.isActive()) {
             return Optional.empty();
@@ -76,7 +80,7 @@ class InMemoryStudentRepository implements IStudentRepository {
     }
 
     @Override
-    public Optional<Student> findById(UUID id) {
+    public Optional<Student> findById(Long id) {
         return Optional.ofNullable(students.get(id))
                 .filter(Student::isActive);
     }

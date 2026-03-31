@@ -8,24 +8,28 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 @Profile("memory")
 class InMemoryTeacherRepository implements ITeacherRepository {
 
-    private final Map<UUID, Teacher> teachers = new ConcurrentHashMap<>();
+    private final Map<Long, Teacher> teachers = new ConcurrentHashMap<>();
+    private final AtomicLong idSequence = new AtomicLong(1);
 
     @Override
     public Teacher save(Teacher teacher) {
         LocalDate now = LocalDate.now();
 
         if (teacher.getId() == null) {
-            teacher.setId(UUID.randomUUID());
-            if (teacher.getCreatedAt() == null) {
-                teacher.setCreatedAt(now);
-            }
+            teacher.setId(idSequence.getAndIncrement());
+        } else {
+            idSequence.updateAndGet(current -> Math.max(current, teacher.getId() + 1));
+        }
+
+        if (teacher.getCreatedAt() == null) {
+            teacher.setCreatedAt(now);
         }
 
         teacher.setUpdatedAt(now);
@@ -34,7 +38,7 @@ class InMemoryTeacherRepository implements ITeacherRepository {
     }
 
     @Override
-    public Optional<Teacher> update(UUID id, Teacher teacher) {
+    public Optional<Teacher> update(Long id, Teacher teacher) {
         Teacher existingTeacher = teachers.get(id);
         if (existingTeacher == null || !existingTeacher.isActive()) {
             return Optional.empty();
@@ -54,7 +58,7 @@ class InMemoryTeacherRepository implements ITeacherRepository {
     }
 
     @Override
-    public Optional<Teacher> delete(UUID id) {
+    public Optional<Teacher> delete(Long id) {
         Teacher existingTeacher = teachers.get(id);
         if (existingTeacher == null || !existingTeacher.isActive()) {
             return Optional.empty();
@@ -74,7 +78,7 @@ class InMemoryTeacherRepository implements ITeacherRepository {
     }
 
     @Override
-    public Optional<Teacher> findById(UUID id) {
+    public Optional<Teacher> findById(Long id) {
         return Optional.ofNullable(teachers.get(id))
                 .filter(Teacher::isActive);
     }
