@@ -21,6 +21,8 @@ public class Student {
     private String lastname;
     private String studentId;
     private float gpa;
+    private String password;
+    private String fotoPerfilUrl;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;

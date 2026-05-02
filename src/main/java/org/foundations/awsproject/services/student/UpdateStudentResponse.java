@@ -16,6 +16,8 @@ public record UpdateStudentResponse(
         String studentId,
         @JsonProperty("promedio")
         float gpa,
+        @JsonProperty("fotoPerfilUrl")
+        String fotoPerfilUrl,
         @JsonIgnore
         boolean isActive,
         @JsonIgnore
@@ -31,6 +33,7 @@ public record UpdateStudentResponse(
                 student.getLastname(),
                 student.getStudentId(),
                 student.getGpa(),
+                student.getFotoPerfilUrl(),
                 student.isActive(),
                 student.getCreatedAt(),
                 student.getUpdatedAt()

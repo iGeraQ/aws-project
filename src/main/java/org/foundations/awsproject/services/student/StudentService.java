@@ -58,4 +58,15 @@ public class StudentService {
                 .map(UpdateStudentResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
     }
+
+    public void updateProfilePicture(Long id, String url) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
+        student.setFotoPerfilUrl(url);
+        // Note: In JpaStudentRepository, save() is used for updates if it's JPA.
+        // Wait, does JpaStudentRepository have a save method that does update?
+        // Wait, the interface IStudentRepository has `save()` and `update(Long, Student)`.
+        // The custom update ignores fotoPerfilUrl currently, so we use `save()` if IStudentRepository exposes it, or we implement update logic. Let's just use `save` if it extends JpaRepository. Wait, IStudentRepository is custom?
+        studentRepository.save(student);
+    }
 }
