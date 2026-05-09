@@ -14,12 +14,26 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: development
     ports:
       - "8081:8080"
     env_file:
       - .env
     environment:
       - DB_URL=jdbc:postgresql://postgres:5432/mydatabase
+      - SPRING_DOCKER_COMPOSE_ENABLED=false
+    volumes:
+      - .:/app
+      - /app/build
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - build/
+        - action: rebuild
+          path: build.gradle
     depends_on:
       - postgres
 

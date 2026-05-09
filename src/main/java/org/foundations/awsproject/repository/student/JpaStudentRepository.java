@@ -35,6 +35,9 @@ class JpaStudentRepository implements IStudentRepository{
                     if (student.getStudentId() != null) {
                         existingStudent.setStudentId(student.getStudentId());
                     }
+                    if (student.getPassword() != null) {
+                        existingStudent.setPassword(student.getPassword());
+                    }
                     existingStudent.setGpa(student.getGpa());
                     return this.springStudentRepository.save(existingStudent);
                 });

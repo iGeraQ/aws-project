@@ -1,10 +1,12 @@
 package org.foundations.awsproject.services.student;
 
+import org.aspectj.weaver.bcel.BcelGenericSignatureToTypeXConverter;
 import org.foundations.awsproject.entities.Student;
 import org.foundations.awsproject.repository.student.IStudentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 
@@ -36,6 +38,10 @@ public class StudentService {
         student.setLastname(request.lastname());
         student.setStudentId(request.studentId());
         student.setGpa(request.gpa());
+
+        // Generate hashed password
+        String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+        student.setPassword(hashedPassword);
 
         Student savedStudent = studentRepository.save(student);
         return CreateStudentResponse.from(savedStudent);

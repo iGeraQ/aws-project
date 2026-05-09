@@ -26,9 +26,13 @@ public record CreateStudentRequest(
         String studentId,
         @NotNull
         @Positive
-        @Max(4)
+        @Max(10)
         @JsonProperty("promedio")
         @JsonAlias("gpa")
-        float gpa
-) {
+        float gpa,
+        @NotBlank
+        @JsonProperty("password")
+        @JsonAlias("password")
+        String password
+) {     
 }
