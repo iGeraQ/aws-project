@@ -57,7 +57,7 @@ public class StudentController {
     }
 
     @PostMapping(value = "/{id}/fotoPerfil", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadProfilePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadProfilePicture(@PathVariable Long id, @RequestParam("foto") MultipartFile file) {
         try {
             this.studentService.findById(id);
 
@@ -66,17 +66,21 @@ public class StudentController {
             this.studentService.updateProfilePicture(id, url);
 
             return ResponseEntity.ok().body(Map.of("fotoPerfilUrl", url));
+        } catch (org.springframework.web.server.ResponseStatusException e) {
+            throw e;
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
     @PostMapping("/{id}/email")
-    public ResponseEntity<?> sendEmailNotification(@PathVariable Long id) {
+    public ResponseEntity<?> sendEmailNotification(@PathVariable Long id, @RequestBody @Valid UpdateStudentRequest request) {
         try {
-            UpdateStudentResponse student = this.studentService.findById(id);
+            UpdateStudentResponse student = this.studentService.update(id, request);
             this.snsService.sendStudentEmail(student);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(student);
+        } catch (org.springframework.web.server.ResponseStatusException e) {
+            throw e;
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

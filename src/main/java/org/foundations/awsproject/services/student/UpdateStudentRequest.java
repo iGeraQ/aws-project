@@ -21,9 +21,13 @@ public record UpdateStudentRequest(
         @JsonAlias("studentId")
         @NotBlank String studentId,
 
+        @JsonProperty("password")
+        @JsonAlias("password")
+        @NotBlank String password,
+
         @JsonProperty("promedio")
         @JsonAlias("gpa")
         @Positive
-        @Max(5)
+        @Max(10)
         float gpa
 ) { }
