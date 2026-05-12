@@ -8,6 +8,7 @@ import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
+import org.springframework.beans.factory.annotation.Value;
 import java.util.Optional;
 
 @Repository
@@ -15,8 +16,8 @@ public class DynamoDBSessionRepository {
 
     private final DynamoDbTable<StudentSession> sessionTable;
 
-    public DynamoDBSessionRepository(DynamoDbEnhancedClient enhancedClient) {
-        this.sessionTable = enhancedClient.table("sesiones-alumnos", TableSchema.fromBean(StudentSession.class));
+    public DynamoDBSessionRepository(DynamoDbEnhancedClient enhancedClient, @Value("${aws.dynamodb.tableName}") String tableName) {
+        this.sessionTable = enhancedClient.table(tableName, TableSchema.fromBean(StudentSession.class));
     }
 
     public void save(StudentSession session) {

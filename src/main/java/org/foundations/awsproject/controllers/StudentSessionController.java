@@ -21,13 +21,13 @@ public class StudentSessionController {
     public ResponseEntity<?> login(@PathVariable Long id, @RequestBody Map<String, String> request) {
         String password = request.get("password");
         if (password == null) {
-            return ResponseEntity.badRequest().body("Falta el campo password");
+            return ResponseEntity.badRequest().body(Map.of("error", "Falta el campo password"));
         }
         try {
             StudentSession session = sessionService.login(id, password);
             return ResponseEntity.ok(session);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -35,13 +35,13 @@ public class StudentSessionController {
     public ResponseEntity<?> verify(@PathVariable Long id, @RequestBody Map<String, String> request) {
         String sessionString = request.get("sessionString");
         if (sessionString == null) {
-            return ResponseEntity.badRequest().body("Falta el campo sessionString");
+            return ResponseEntity.badRequest().body(Map.of("error", "Falta el campo sessionString"));
         }
         boolean isValid = sessionService.verify(sessionString);
         if (isValid) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(Map.of("status", "connected"));
         } else {
-            return ResponseEntity.badRequest().body("Sesión inválida o inactiva");
+            return ResponseEntity.badRequest().body(Map.of("error", "Sesión inválida o inactiva"));
         }
     }
 
@@ -49,9 +49,9 @@ public class StudentSessionController {
     public ResponseEntity<?> logout(@PathVariable Long id, @RequestBody Map<String, String> request) {
         String sessionString = request.get("sessionString");
         if (sessionString == null) {
-            return ResponseEntity.badRequest().body("Falta el campo sessionString");
+            return ResponseEntity.badRequest().body(Map.of("error", "Falta el campo sessionString"));
         }
         sessionService.logout(sessionString);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Map.of("status", "disconnected"));
     }
 }
