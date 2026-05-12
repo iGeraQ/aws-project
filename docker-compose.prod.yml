@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: production
     image: aws-project-app:latest
     ports:
       - "8081:8080"
